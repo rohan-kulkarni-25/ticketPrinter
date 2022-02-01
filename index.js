@@ -3,7 +3,7 @@ const app = require("./app");
 // const connectDB = require("./config/database");
 const cloudinary = require("cloudinary");
 
-const { PORT } = process.env;
+const PORT = process.env.PORT;
 
 // connectDB();
 
