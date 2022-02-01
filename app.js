@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(cors())
 
 var corsOptions = {
-  origin: 'http://example.com',
+  origin: 'https://ticket-printer-frontend-app.vercel.app/',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 
