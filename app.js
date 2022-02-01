@@ -3,9 +3,12 @@ const Jimp = require("jimp");
 const express = require("express");
 const app = express();
 const cloudinary = require("cloudinary");
+const cors = require('cors')
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors())
 
 app.get("/", (req, res) => {
   res.status(200).end(`Hello`)
@@ -61,6 +64,11 @@ const generateTicket = async (Text, fileName) => {
 app.post('/print',async (req,res)=> {
   console.log(`------NEW POST REQUEST------`);
   const data = req.body.name;
+  const dataOnDatabase = {
+    name: req.body.name,
+    email: req.body.email
+  }
+
   const stuName = data;
   console.log(`Priting Ticket for ${stuName}`);
   const fileName = stuName.trim().replace(/\s/g, "-") + ".png";

@@ -1,11 +1,22 @@
 require("dotenv").config();
 const app = require("./app");
-// const connectDB = require("./config/database");
 const cloudinary = require("cloudinary");
 
 const PORT = process.env.PORT;
 
-// connectDB();
+const mongoose = require("mongoose");
+
+
+
+mongoose.connect(process.env.DB_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(console.log(`DB CONNECTED SUCESSFULLY`)).catch(error => {
+  console.log(`DB CONNECTION FAILED`);
+  console.log(error);
+  process.exit(1);
+})
+
 
 // Cloudinary config
 cloudinary.config({
