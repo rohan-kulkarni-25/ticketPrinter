@@ -4,15 +4,11 @@ const express = require("express");
 const app = express();
 const cloudinary = require("cloudinary");
 
-
-app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
-  res.status(200).json({
-    data: {},
-  });
+  res.status(200).end(`Hello`)
 });
 
 const uploadOnCloudinary = async (fileName) => {
