@@ -8,12 +8,13 @@ const cors = require('cors')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(cors())
 
-var corsOptions = {
-  origin: 'https://ticket-printer-frontend-app.vercel.app/',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  next();
+});
+
+
 
 app.get("/", (req, res) => {
   res.status(200).end(`Hello`)
@@ -66,7 +67,7 @@ const generateTicket = async (Text, fileName) => {
   }
 };
 
-app.post('/print', cors(corsOptions), async (req, res) => {
+app.post('/print', async (req, res) => {
   console.log(`------NEW POST REQUEST------`);
   const data = req.body.name;
   const dataOnDatabase = {
