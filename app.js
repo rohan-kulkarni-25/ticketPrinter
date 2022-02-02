@@ -87,11 +87,12 @@ app.post('/print', async (req, res) => {
         const response = uploadOnCloudinary(fileName).then(result => {
           try {
             const dir = `${__dirname}/Certificates/${fileName}`
-            fs.unlink(dir, { recursive: true }, (err) => {
+            fs.unlink(dir, (err) => {
               if (err) {
                 throw err;
               }
               console.log(`${dir} is deleted!`);
+
             });
           } catch (error) {
             console.log(error);
