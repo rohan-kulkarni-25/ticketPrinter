@@ -66,13 +66,13 @@ const generateTicket = async (Text, fileName) => {
 
 app.post('/print', async (req, res) => {
   console.log(`------NEW POST REQUEST------`);
-  const data = req.body.name;
+  const data = req.body.name || '';
   const dataOnDatabase = {
     name: req.body.name || 'null',
     email: req.body.email || 'null'
   }
   console.log(`Uploading Logs to DB`);
-  if (!(name === 'null' && email === 'null')) {
+  if (!(dataOnDatabase.name === 'null' && dataOnDatabase.email === 'null')) {
     await Data.create(dataOnDatabase);
   }
   const stuName = data;
