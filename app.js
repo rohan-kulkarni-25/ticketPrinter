@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const cloudinary = require("cloudinary");
 const cors = require('cors')
-
+const Data = require('./dataModel')
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -68,10 +68,13 @@ app.post('/print', async (req, res) => {
   console.log(`------NEW POST REQUEST------`);
   const data = req.body.name;
   const dataOnDatabase = {
-    name: req.body.name,
-    email: req.body.email
+    name: req.body.name || 'null',
+    email: req.body.email || 'null'
   }
-
+  console.log(`Uploading Logs to DB`);
+  if (!(name === 'null' && email === 'null')) {
+    await Data.create(dataOnDatabase);
+  }
   const stuName = data;
   console.log(`Priting Ticket for ${stuName}`);
   const fileName = stuName.trim().replace(/\s/g, "-") + ".png";
@@ -95,6 +98,14 @@ app.post('/print', async (req, res) => {
     })
   }, 5000);
   
+})
+
+app.get('/getlogs', async (req, res) => {
+  const logs = await Data.find()
+
+  res.status(200).json({
+    data: logs
+  })
 })
 
 module.exports = app;
