@@ -28,10 +28,6 @@ const uploadOnCloudinary = async (fileName) => {
     return result.secure_url;
   } catch (error) {
     console.log(error);
-    res.send({
-      success: false,
-      data: ''
-    })
   }
 };
 
@@ -65,10 +61,6 @@ const generateTicket = async (Text, fileName) => {
       });
   } catch (error) {
     console.log(error);
-    res.send({
-      success: false,
-      data: ''
-    })
   }
 };
 
@@ -91,24 +83,28 @@ app.post('/print', async (req, res) => {
 
     setTimeout(() => {
 
-      const response = uploadOnCloudinary(fileName).then(result => {
-        try {
-          const dir = `${__dirname}/Certificates`
-          fs.rmdir(dir, { recursive: true }, (err) => {
-            if (err) {
-              throw err;
-            }
-            console.log(`${dir} is deleted!`);
-          });
-        } catch (error) {
-          console.log(error);
-        }
-        console.log(`response sent`);
-        res.status(201).json({
-          success: true,
-          data: result
+      try {
+        const response = uploadOnCloudinary(fileName).then(result => {
+          try {
+            const dir = `${__dirname}/Certificates`
+            fs.rmdir(dir, { recursive: true }, (err) => {
+              if (err) {
+                throw err;
+              }
+              console.log(`${dir} is deleted!`);
+            });
+          } catch (error) {
+            console.log(error);
+          }
+          console.log(`response sent`);
+          res.status(201).json({
+            success: true,
+            data: result
+          })
         })
-      })
+      } catch (error) {
+        console.log(error);
+      }
     }, 5000);
   } catch (error) {
     console.log(error);
