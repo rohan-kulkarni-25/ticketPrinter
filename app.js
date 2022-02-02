@@ -87,7 +87,7 @@ app.post('/print', async (req, res) => {
         const response = uploadOnCloudinary(fileName).then(result => {
           try {
             const dir = `${__dirname}/Certificates/${fileName}`
-            fs.rmdir(dir, { recursive: true }, (err) => {
+            fs.unlink(dir, { recursive: true }, (err) => {
               if (err) {
                 throw err;
               }
