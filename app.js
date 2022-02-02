@@ -83,13 +83,17 @@ app.post('/print', async (req, res) => {
   setTimeout(() => {
     
     const response = uploadOnCloudinary(fileName).then(result => {
-      const dir = `${__dirname}/Certificates`
-      fs.rmdir(dir, { recursive: true }, (err) => {
-        if (err) {
+      try {
+        const dir = `${__dirname}/Certificates`
+        fs.rmdir(dir, { recursive: true }, (err) => {
+          if (err) {
             throw err;
-        }
-        console.log(`${dir} is deleted!`);
-    });
+          }
+          console.log(`${dir} is deleted!`);
+        });
+      } catch (error) {
+        console.log(error);
+      }
       console.log(`response sent`);
       res.status(201).json({
         success:true,
