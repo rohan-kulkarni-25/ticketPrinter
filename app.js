@@ -28,6 +28,10 @@ const uploadOnCloudinary = async (fileName) => {
     return result.secure_url;
   } catch (error) {
     console.log(error);
+    res.send({
+      success: false,
+      data: ''
+    })
   }
 };
 
@@ -61,46 +65,59 @@ const generateTicket = async (Text, fileName) => {
       });
   } catch (error) {
     console.log(error);
+    res.send({
+      success: false,
+      data: ''
+    })
   }
 };
 
 app.post('/print', async (req, res) => {
-  console.log(`------NEW POST REQUEST------`);
-  const data = req.body.name || '';
-  const dataOnDatabase = {
-    name: req.body.name || 'null',
-    email: req.body.email || 'null'
-  }
-  console.log(`Uploading Logs to DB`);
-  if (!(dataOnDatabase.name === 'null' && dataOnDatabase.email === 'null')) {
-    await Data.create(dataOnDatabase);
-  }
-  const stuName = data;
-  console.log(`Priting Ticket for ${stuName}`);
-  const fileName = stuName.trim().replace(/\s/g, "-") + ".png";
-  const response = await generateTicket(stuName, fileName)
-  
-  setTimeout(() => {
-    
-    const response = uploadOnCloudinary(fileName).then(result => {
-      try {
-        const dir = `${__dirname}/Certificates`
-        fs.rmdir(dir, { recursive: true }, (err) => {
-          if (err) {
-            throw err;
-          }
-          console.log(`${dir} is deleted!`);
-        });
-      } catch (error) {
-        console.log(error);
-      }
-      console.log(`response sent`);
-      res.status(201).json({
-        success:true,
-        data:result
+  try {
+    console.log(`------NEW POST REQUEST------`);
+    const data = req.body.name || '';
+    const dataOnDatabase = {
+      name: req.body.name || 'null',
+      email: req.body.email || 'null'
+    }
+    console.log(`Uploading Logs to DB`);
+    if (!(dataOnDatabase.name === 'null' && dataOnDatabase.email === 'null')) {
+      await Data.create(dataOnDatabase);
+    }
+    const stuName = data;
+    console.log(`Priting Ticket for ${stuName}`);
+    const fileName = stuName.trim().replace(/\s/g, "-") + ".png";
+    const response = await generateTicket(stuName, fileName)
+
+    setTimeout(() => {
+
+      const response = uploadOnCloudinary(fileName).then(result => {
+        try {
+          const dir = `${__dirname}/Certificates`
+          fs.rmdir(dir, { recursive: true }, (err) => {
+            if (err) {
+              throw err;
+            }
+            console.log(`${dir} is deleted!`);
+          });
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(`response sent`);
+        res.status(201).json({
+          success: true,
+          data: result
+        })
       })
+    }, 5000);
+  } catch (error) {
+    console.log(error);
+    res.send({
+      success: false,
+      data: ''
     })
-  }, 5000);
+  }
+
   
 })
 
